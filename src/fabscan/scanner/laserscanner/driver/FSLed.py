@@ -9,8 +9,8 @@ class Led:
         self.hardware_connector = hardware_connector
         self.is_on = False
 
-    def on(self, red, green, blue):
-        self.hardware_connector.light_on(red, green, blue)
+    def on(self, red, green, blue, white):
+        self.hardware_connector.light_on(red, green, blue, white)
         self.is_on = True
 
     def off(self):
