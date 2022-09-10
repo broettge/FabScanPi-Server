@@ -1,0 +1,78 @@
+{
+    "folders": {
+        "www": "/usr/share/fabscanpi/",
+        "scans": "/home/pi/scans/"
+    },
+    "laser": {
+        "interleaved": "False",
+        "numbers": 2,
+        "color": "R (RGB)"
+    },
+    "scanner_type": "laserscanner",
+    "calibration": {
+        "weight_matrix": [],
+        "dist_camera_matrix": [],
+        "pattern": {
+            "square_size": 11,
+            "rows": 6,
+            "columns": 8,
+            "origin_distance": 36.0,
+            "type": "chessboard"
+        },
+        "camera_matrix": [],
+        "distortion_vector": [],
+        "laser_planes": [
+            {
+                "deviation": 0,
+                "distance": 0,
+                "normal": []
+            },
+            {
+                "deviation": 0,
+                "distance": 0,
+                "normal": []
+            }
+        ],
+        "platform_translation": [],
+        "platform_rotation": []
+    },
+    "meshlab": {
+        "path": "/usr/bin/"
+    },
+    "process_numbers": 3,
+    "turntable": {
+        "steps": 19556,
+        "radius": 100,
+        "height": 155
+    },
+    "camera": {
+        "resolution": {
+            "width": 1640,
+            "height": 1232
+        },
+        "preview_resolution": {
+            "width": 800,
+            "height": 600
+        },
+        "rotate": "False",
+        "hflip": "False",
+        "vflip": "False",
+        "type": "PICAM",
+        "undistort": "False"
+    },
+    "connector": {
+        "type": "serial",
+        "firmware": "fabscanpi",
+        "baudrate": 115200,
+        "autoflash": "False",
+        "flash_baudrate": 115200,
+        "port": "/dev/ttyACM0",
+        "partnumber": "atmega2560",
+        "programmer": "wiring"
+    },
+    "texture_illumination": 160,
+    "keep_raw_images": "False",
+    "keep_calibration_raw_images": "False",
+    "discoverable": "True",
+    "online_lookup_ip": "8.8.8.8"
+}

@@ -35,6 +35,19 @@ class FSSerialCom(FSHardwareConnectorInterface):
         else:
             self.flash_baudrate = 57600
 
+        if hasattr(self.config.file.connector, 'programmer'):
+            self._programmer = self.config.file.connector.programmer
+            self._logger.debug("Programmer in Config found using: {0}".format(self._programmer))
+        else:
+            self._programmer = "arduino"
+
+        if hasattr(self.config.file.connector, 'partnumber'):
+            self._partnumber = self.config.file.connector.partno
+            self._logger.debug("Part Number in Config found using: {0}".format(self._partnumber))
+        else:
+            self._partnumber = "arduino"
+
+
         self.buf = bytearray()
 
         self._baudrate = self.config.file.connector.baudrate
@@ -48,12 +61,12 @@ class FSSerialCom(FSHardwareConnectorInterface):
         self._stop = False
 
     def avr_device_is_available(self):
-        status = FSSystem.run_command("sudo avrdude-autoreset -p m328p -b {0} -carduino -P{1}".format(self.flash_baudrate, self._port))
+        status = FSSystem.run_command("sudo avrdude-autoreset -p {0} -b {1} -c {2} -P{3}".format(self._partnumber, self.flash_baudrate, self._programmer, self._port))
         return status == 0
 
     def avr_flash(self, fname):
         FSSystem.run_command("wc -l {0}".format(fname))
-        status = FSSystem.run_command("sudo avrdude-autoreset -D -V -U flash:w:{0}:i -b {1} -carduino -pm328p -P{2}".format(fname, self.flash_baudrate, self._port))
+        status = FSSystem.run_command("sudo avrdude-autoreset -D -V -U flash:w:{0}:i -b {1} -c {2} -p {3} -P {4}".format(fname, self.flash_baudrate, self._programmer, self._partnumber, self._port))
         if status != 0:
             self._logger.error("Failed to flash firmware")
         return status == 0
@@ -112,6 +125,9 @@ class FSSerialCom(FSHardwareConnectorInterface):
                                         self._connect()
                                         current_version = self.checkVersion()
                                         self._logger.info("Successfully flashed Firmware Version: {0}".format(current_version))
+                            else:
+                                self._logger.error("No firmware detected and autoflash is turned off.")
+                                
            else:
                     self._logger.error("Communication error on port {0} try other flashing baudrate than {1}. Maybe corrupted bootloader.".format(self._port, self.flash_baudrate))
 
@@ -207,6 +223,7 @@ class FSSerialCom(FSHardwareConnectorInterface):
 
     def send(self, message):
         try:
+            self._logger.debug("Sending Message: {0}".format(message))
             message = message + "\n"
             self._serial.write(message.encode())
         except Exception as e:
@@ -245,10 +262,10 @@ class FSSerialCom(FSHardwareConnectorInterface):
         #self._logger.debug("Laser {0} Switched off".format(laser))
         self.send_and_receive(command)
 
-    def light_on(self, red, green, blue):
-        command = "M05 R{0} G{1} B{2}".format(red, green, blue)
+    def light_on(self, red, green, blue, white):
+        command = "M05 R{0} G{1} B{2} W{3}".format(red, green, blue, white)
         self.send_and_receive(command)
 
     def light_off(self):
-        command = "M05 R0 G0 B0"
+        command = "M05 R0 G0 B0 W0"
         self.send_and_receive(command)
