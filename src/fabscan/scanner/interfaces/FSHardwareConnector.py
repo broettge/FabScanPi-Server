@@ -36,7 +36,7 @@ class FSHardwareConnectorInterface:
         """
         raise NotImplementedError("Can't use 'laser off' on an this type of scanner")
 
-    def light_on(self, red, green, blue):
+    def light_on(self, red, green, blue, white):
         """
         Switches the led on
         """

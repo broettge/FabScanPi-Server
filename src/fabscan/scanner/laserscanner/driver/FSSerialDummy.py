@@ -81,12 +81,12 @@ class FSSerialDummy(FSHardwareConnectorInterface):
         self.send_and_receive(command)
         return
 
-    def light_on(self, red, green, blue):
-        command = "M05 R{0} G{1} B{2}".format(red, green, blue)
+    def light_on(self, red, green, blue, white):
+        command = "M05 R{0} G{1} B{2} W{3}".format(red, green, blue, white)
         self.send_and_receive(command)
         return
 
     def light_off(self):
-        command = "M05 R0 G0 B0"
+        command = "M05 R0 G0 B0 W0"
         self.send_and_receive(command)
         return
