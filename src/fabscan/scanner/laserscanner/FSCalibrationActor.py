@@ -48,7 +48,7 @@ class FSCalibrationActor(FSCalibrationActorInterface):
         self.aruco_ids = []
 
         self.calibration_brightness = [100, 100, 100]
-        self.quater_turn = int(self.config.file.turntable.steps / 4)
+        self.quarter_turn = int(self.config.file.turntable.steps / 4)
 
         self.motor_move_degree = 3.6 # 1.8,  2.7 , 3.6, 5.0
         self.steps_five_degree = int(self.motor_move_degree / (360 / self.config.file.turntable.steps))
@@ -56,7 +56,7 @@ class FSCalibrationActor(FSCalibrationActorInterface):
         self.laser_calib_end = self.LASER_PLANE_CALIBRATION_END_POS_DEGREE * self.steps_five_degree / 5
 
         self.motorsteps_per_calibration_step = int(self.motor_move_degree / (360 / self.config.file.turntable.steps))
-        self.total_positions = int(((self.quater_turn / self.motorsteps_per_calibration_step) * 4) + 2)
+        self.total_positions = int(((self.quarter_turn / self.motorsteps_per_calibration_step) * 4) + 2)
         self.current_position = 0
         self._starttime = 0
         self.position = 0
@@ -251,10 +251,10 @@ class FSCalibrationActor(FSCalibrationActorInterface):
         try:
             # the calibration was stopped or just started.
             if not self._stop_calibration and self.position == 0:
-                self._hardwarecontroller.move_to_next_position(steps=self.quater_turn, speed=5000)
+                self._hardwarecontroller.move_to_next_position(steps=self.quarter_turn, speed=5000)
                 time.sleep(3)
 
-            if abs(self.position) < self.quater_turn * 2:
+            if abs(self.position) < self.quarter_turn * 2:
                 self._logger.debug("Step {0} of {1} in {2}.".format(self.current_position, self.total_positions, self.current_calibtation_mode))
 
                 if not self._stop_calibration:
@@ -274,8 +274,8 @@ class FSCalibrationActor(FSCalibrationActorInterface):
                     self.current_position += 1
 
             # the calibration is done, go over to the next calibration step or just exit.
-            if not self._stop_calibration and abs(self.position) == self.quater_turn * 2:
-                self._hardwarecontroller.move_to_next_position(steps=self.quater_turn, speed=5000)
+            if not self._stop_calibration and abs(self.position) == self.quarter_turn * 2:
+                self._hardwarecontroller.move_to_next_position(steps=self.quarter_turn, speed=5000)
                 _calibrate()
                 #  if mode is auto calibration, we just finished the auto camera calibration, now move over to
                 #  scanner calibration, if we are not in auto calibration mode (anymore) we are done with the calibration
@@ -286,7 +286,7 @@ class FSCalibrationActor(FSCalibrationActorInterface):
                     self.actor_ref.tell({FSEvents.COMMAND: "CALIBRATION_COMPLETE"})
 
             # we are not done here, trigger the actor itself for the next step
-            if abs(self.position) < self.quater_turn * 2 and not self._stop_calibration:
+            if abs(self.position) < self.quarter_turn * 2 and not self._stop_calibration:
                 # we are still in auto camera calibraion mode.
                 if ( self.current_calibtation_mode == FSCalibrationMode.MODE_AUTO_CALIBRATION ):
                     self.actor_ref.tell({FSEvents.COMMAND: "TRIGGER_AUTO_CAMERA_CALIBRATION_STEP"})
