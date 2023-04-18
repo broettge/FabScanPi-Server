@@ -263,7 +263,7 @@ class FSSerialCom(FSHardwareConnectorInterface):
         self.send_and_receive(command)
 
     def light_on(self, red, green, blue, white):
-        command = "M05 R{0} G{1} B{2} W{3}".format(red, green, blue, white)
+        command = "M04 R{0} G{1} B{2} W{3}".format(red, green, blue, white)
         self.send_and_receive(command)
 
     def light_off(self):
